@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-container {
+  max-width: 1000px;
+  margin: auto;
+  background: #fff;
+  padding: 30px;
+  margin-top: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-container h2,
+h3 {
+  text-align: center;
+  color: #333;
+}
+
+.admin-form,
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.admin-form input,
+.edit-form input,
+.admin-form textarea,
+.edit-form textarea,
+.admin-form select,
+.edit-form select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.admin-form button,
+.edit-form button {
+  padding: 10px;
+  background: #0073e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.admin-form button:hover,
+.edit-form button:hover {
+  background: #005bb5;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+table th,
+table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+
+table img {
+  max-height: 80px;
+  border-radius: 4px;
+}
