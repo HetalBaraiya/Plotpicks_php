@@ -53,10 +53,29 @@ $books = $stmt->get_result();
             <a href="#book-catalog" class="read-more-btn">Read More</a>
         </div>
         <div class="banner-image">
-            <img src="uploads/banner-illustration.png" alt="Reading Illustration">
+            <img src="images/logo/reading-book.png" alt="Reading Illustration">
         </div>
     </div>
 </section>
+
+<div class="suggested-books-wrapper">
+  <h2 class="suggested-books-title">Suggested Books (Top Rated)</h2>
+  <div class="book-grid suggested-books">
+      <?php
+      $topBooks = $conn->query("SELECT books.*, 
+          (SELECT AVG(rating) FROM reviews WHERE reviews.book_id = books.id) AS avg_rating 
+          FROM books 
+          ORDER BY avg_rating DESC 
+          LIMIT 5");
+      while ($book = $topBooks->fetch_assoc()): ?>
+          <div class="book-card small">
+              <h4><?= htmlspecialchars($book['title']) ?></h4>
+              <p><?= displayStars($book['avg_rating']) ?></p>
+          </div>
+      <?php endwhile; ?>
+  </div>
+</div>
+
 
 
 <div class="container gallery-container">
@@ -81,7 +100,7 @@ $books = $stmt->get_result();
                     <?php if ($book['cover_image']): ?>
     <img src="uploads/<?= htmlspecialchars($book['cover_image']) ?>" alt="<?= htmlspecialchars($book['title']) ?>" class="book-cover">
 <?php else: ?>
-    <img src="placeholder.png" alt="No Cover" class="book-cover">
+    <img src="images/placeholder.png" alt="No Cover" class="book-cover">
 <?php endif; ?>
 
                 <div class="book-info">
@@ -211,24 +230,6 @@ $books = $stmt->get_result();
   }
 </style>
     -->
-
-
-    <hr>
-    <h2>Suggested Books (Top Rated)</h2>
-    <div class="book-grid suggested-books">
-        <?php
-        $topBooks = $conn->query("SELECT books.*, 
-            (SELECT AVG(rating) FROM reviews WHERE reviews.book_id = books.id) AS avg_rating 
-            FROM books 
-            ORDER BY avg_rating DESC 
-            LIMIT 5");
-        while ($book = $topBooks->fetch_assoc()): ?>
-            <div class="book-card small">
-                <h4><?= htmlspecialchars($book['title']) ?></h4>
-                <p><?= displayStars($book['avg_rating']) ?></p>
-            </div>
-        <?php endwhile; ?>
-    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
