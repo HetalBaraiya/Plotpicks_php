@@ -1,155 +1,166 @@
 <?php
+
 session_start();
-require_once '../includes/db.php';
 
-if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
-    header("Location: ../index.php");
-    exit();
-}
-
-// Handle book deletion
-if (isset($_GET['delete'])) {
-    $id = (int)$_GET['delete'];
-    $stmt = $conn->prepare("DELETE FROM books WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    header("Location: dashboard.php");
-    exit();
-}
-
-// Handle book update
-if (isset($_POST['edit_book'])) {
-    $book_id = $_POST['book_id'];
-    $title = trim($_POST['title']);
-    $author = trim($_POST['author']);
-    $description = trim($_POST['description']);
-    $genre_id = $_POST['genre_id'];
-    $cover_image = '';
-
-    if (!empty($_FILES['cover_image']['name'])) {
-        $target_dir = "../uploads/";
-        $cover_image = basename($_FILES["cover_image"]["name"]);
-        $target_file = $target_dir . $cover_image;
-        move_uploaded_file($_FILES["cover_image"]["tmp_name"], $target_file);
-    }
-
-    if ($cover_image) {
-        $stmt = $conn->prepare("UPDATE books SET title=?, author=?, description=?, genre_id=?, cover_image=? WHERE id=?");
-        $stmt->bind_param("sssisi", $title, $author, $description, $genre_id, $cover_image, $book_id);
-    } else {
-        $stmt = $conn->prepare("UPDATE books SET title=?, author=?, description=?, genre_id=? WHERE id=?");
-        $stmt->bind_param("sssii", $title, $author, $description, $genre_id, $book_id);
-    }
-    $stmt->execute();
-    header("Location: dashboard.php");
-    exit();
-}
-
-// Handle new book addition
-if (isset($_POST['add_book'])) {
-    $title = trim($_POST['title']);
-    $author = trim($_POST['author']);
-    $description = trim($_POST['description']);
-    $genre_id = $_POST['genre_id'];
-    $cover_image = '';
-
-    if (!empty($_FILES['cover_image']['name'])) {
-        $target_dir = "../uploads/";
-        $cover_image = basename($_FILES["cover_image"]["name"]);
-        $target_file = $target_dir . $cover_image;
-        move_uploaded_file($_FILES["cover_image"]["tmp_name"], $target_file);
-    }
-
-    if ($title && $author && $description && $genre_id && $cover_image) {
-        $stmt = $conn->prepare("INSERT INTO books (title, author, description, genre_id, cover_image) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssis", $title, $author, $description, $genre_id, $cover_image);
-        $stmt->execute();
-    }
-    header("Location: dashboard.php");
-    exit();
-}
-
-// Fetch books and genres
-$books = $conn->query("SELECT books.*, genres.name AS genre_name FROM books JOIN genres ON books.genre_id = genres.id ORDER BY books.id DESC");
-$genres = $conn->query("SELECT * FROM genres");
+$section = $_GET['section'] ?? 'Books';
+$action = $_GET['action'] ?? '';
 ?>
 
+
+
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../css/admin.css">
-    <link rel="stylesheet" href="../css/style.css">
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/admin.css">
+    
+  <style>
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+      max-width: 100%;
+    }
+
+    #admin-sidebar {
+      width: 200px;
+      background: #f1f1f1;
+      padding: 1rem;
+    }
+
+    #admin-sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-nav-item {
+      padding: 10px;
+      margin: 8px 0;
+      cursor: pointer;
+      background: #ddd;
+      border-radius: 4px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .admin-nav-item a {
+      text-decoration: none;
+      color: #333;
+      display: block;
+    }
+
+    .admin-nav-item:hover {
+      background: #ccc;
+    }
+
+    .admin-nav-item.active {
+      background: #0073e6;
+    }
+
+    .admin-nav-item.active a {
+      color: white;
+      font-weight: bold;
+    }
+
+    main {
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .button {
+      background: #0073e6;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background: #005bb5;
+    }
+  </style>
 </head>
 <body>
 <?php include '../includes/header.php'; ?>
-<div class="admin-container">
-    <h2>Admin Dashboard</h2>
+<div class="admin-layout">
+  <aside id="admin-sidebar">
+    <ul>
+      <li class="admin-nav-item <?= $section === 'Books' ? 'active' : '' ?>">
+        <a href="?section=Books">📚 Books</a>
+      </li>
+      <li class="admin-nav-item <?= $section === 'Categories' ? 'active' : '' ?>">
+        <a href="?section=Categories">📁 Categories</a>
+      </li>
+      <li class="admin-nav-item <?= $section === 'Users' ? 'active' : '' ?>">
+        <a href="?section=Users">👤 Users</a>
+      </li>
+    </ul>
+  </aside>
 
-    <section>
-        <h3>Add New Book</h3>
-        <form method="POST" enctype="multipart/form-data" class="admin-form">
-            <input type="hidden" name="add_book" value="1">
-            <input type="text" name="title" placeholder="Book Title" required>
-            <input type="text" name="author" placeholder="Author" required>
-            <textarea name="description" placeholder="Description" required></textarea>
-            <select name="genre_id" required>
-                <option value="">Select Genre</option>
-                <?php $genres->data_seek(0); while ($genre = $genres->fetch_assoc()): ?>
-                    <option value="<?= $genre['id'] ?>"><?= htmlspecialchars($genre['name']) ?></option>
-                <?php endwhile; ?>
-            </select>
-            <input type="file" name="cover_image" accept="image/*" required>
-            <button type="submit">Add Book</button>
-        </form>
-    </section>
+  <main>
+    <div class="top-bar">
+      <h2 id="section-title"><?= htmlspecialchars($section) ?></h2>
+      <a href="?section=<?= urlencode($section) ?>&action=add">
+        <button class="button">+ Add</button>
+      </a>
+    </div>
 
-    <section>
-        <h3>All Books</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Cover</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Genre</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($book = $books->fetch_assoc()): ?>
-                    <tr>
-                        <td><img src="../uploads/<?= htmlspecialchars($book['cover_image']) ?>" alt="" width="60"></td>
-                        <td><?= htmlspecialchars($book['title']) ?></td>
-                        <td><?= htmlspecialchars($book['author']) ?></td>
-                        <td><?= htmlspecialchars($book['genre_name']) ?></td>
-                        <td><?= htmlspecialchars(substr($book['description'], 0, 100)) ?>...</td>
-                        <td>
-                            <form method="POST" enctype="multipart/form-data" class="edit-form">
-                                <input type="hidden" name="edit_book" value="1">
-                                <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
-                                <input type="text" name="title" value="<?= htmlspecialchars($book['title']) ?>" required>
-                                <input type="text" name="author" value="<?= htmlspecialchars($book['author']) ?>" required>
-                                <textarea name="description" required><?= htmlspecialchars($book['description']) ?></textarea>
-                                <select name="genre_id" required>
-                                    <?php $genres->data_seek(0); while ($genre = $genres->fetch_assoc()): ?>
-                                        <option value="<?= $genre['id'] ?>" <?= $genre['id'] == $book['genre_id'] ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($genre['name']) ?>
-                                        </option>
-                                    <?php endwhile; ?>
-                                </select>
-                                <input type="file" name="cover_image" accept="image/*">
-                                <button type="submit">Save</button>
-                                <a href="dashboard.php?delete=<?= $book['id'] ?>" onclick="return confirm('Are you sure?')">Delete</a>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </section>
+    <div id="admin-content">
+      <?php
+      if ($action === 'edit' && $section === 'Books') {
+  include "forms/form_edit_Books.php";
+}
+
+        // Display appropriate form or list based on action
+        if ($action === 'add') {
+          $formPath = __DIR__ . "/forms/form_add_{$section}.php";
+          if (file_exists($formPath)) {
+            include $formPath;
+          } else {
+            echo "<p>Form for $section not found.</p>";
+          }
+        } else {
+          $listPath = __DIR__ . "/lists/list_{$section}.php";
+          if (file_exists($listPath)) {
+            include $listPath;
+          } else {
+            echo "<p>List for $section not found.</p>";
+          }
+        }
+      ?>
+    </div>
+  </main>
 </div>
 <?php include '../includes/footer.php'; ?>
+
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const icon = document.getElementById('icon');
+    icon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('icon').textContent = '☀️';
+    }
+  });
+</script>
+
+
 </body>
 </html>

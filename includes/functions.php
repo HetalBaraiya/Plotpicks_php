@@ -27,4 +27,25 @@ function redirect($url) {
     header("Location: $url");
     exit();
 }
+
+function avgRating($bookId) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT AVG(rating) AS avg FROM reviews WHERE book_id = ?");
+    $stmt->bind_param("i", $bookId);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    return round($result['avg'], 1);
+}
+
+function getUsername($userId) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    return $result['username'] ?? 'Anonymous';
+}
+
+
+
 ?>

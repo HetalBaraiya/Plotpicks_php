@@ -73,3 +73,363 @@ table img {
   max-height: 80px;
   border-radius: 4px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  font-size: 15px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+table th,
+table td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+table thead {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table img {
+  max-height: 80px;
+  border-radius: 4px;
+  display: block;
+}
+
+a.button-delete {
+  padding: 6px 12px;
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  transition: background 0.2s ease-in-out;
+}
+
+a.button-delete:hover {
+  background: #c62828;
+}
+
+table,
+th,
+td {
+  border: 1px solid #e0e0e0;
+}
+
+.button-edit {
+  padding: 6px 12px;
+  background: #0288d1;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-right: 6px;
+  display: inline-block;
+}
+
+.button-edit:hover {
+  background: #0277bd;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+#admin-sidebar a,
+.admin-layout a,
+.top-bar a {
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+#admin-sidebar a:hover {
+  color: #0073e6;
+}
+
+/* Header/Navbar */
+.navbar {
+  background-color: #dcd6f7;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.navbar .logo a {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #22223b;
+  text-decoration: none;
+}
+
+.navbar nav a {
+  margin-left: 20px;
+  color: #22223b;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.navbar nav a:hover {
+  color: #9a8c98;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #f3f3f3;
+  color: #777;
+  font-size: 0.9em;
+  margin-top: 60px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* === RESET & BASE === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #faf9f6;
+  color: #333;
+  line-height: 1.6;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #0056b3;
+}
+
+/* === HEADER === */
+.main-header {
+  background: #dcd6f7;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.logo {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #22223b;
+}
+nav {
+  display: flex;
+  gap: 20px;
+}
+.nav-link {
+  color: #22223b;
+  font-weight: 500;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+.nav-link i,
+.nav-link svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  stroke: currentColor;
+}
+.nav-link:hover {
+  color: #9a8c98;
+}
+#theme-toggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #222;
+}
+
+/* === NIGHT MODE === */
+body.dark {
+  background: #1e1e1e;
+  color: #eee;
+}
+body.dark .main-header {
+  background: #2c2c2c;
+}
+body.dark .nav-link {
+  color: #eee;
+}
+body.dark .nav-link:hover {
+  color: #f2b8ff;
+}
+body.dark .container,
+body.dark .book-card,
+body.dark .scroll-book-card,
+body.dark .suggested-books-wrapper,
+body.dark .review-form,
+body.dark .book-description-box {
+  background-color: #2a2a2a;
+  color: #eee;
+  border-color: #444;
+}
+body.dark .scroll-btn,
+body.dark .details-btn,
+body.dark .submit-btn,
+body.dark .view-btn {
+  background-color: #6a5acd;
+  color: white;
+}
+body.dark .scroll-btn:hover,
+body.dark .details-btn:hover,
+body.dark .submit-btn:hover,
+body.dark .view-btn:hover {
+  background-color: #836fff;
+}
+
+/* === Admin Panel Dark Mode Fixes === */
+body.dark .admin-container {
+  background: #2a2a2a;
+  color: #eee;
+  border-color: #444;
+}
+
+body.dark .admin-container h2,
+body.dark .admin-container h3 {
+  color: #f1f1f1;
+}
+
+body.dark .admin-form input,
+body.dark .admin-form textarea,
+body.dark .admin-form select,
+body.dark .edit-form input,
+body.dark .edit-form textarea,
+body.dark .edit-form select {
+  background-color: #333;
+  color: #eee;
+  border: 1px solid #555;
+}
+
+body.dark .admin-form input::placeholder,
+body.dark .edit-form input::placeholder,
+body.dark .admin-form textarea::placeholder,
+body.dark .edit-form textarea::placeholder {
+  color: #aaa;
+}
+
+body.dark .admin-form button,
+body.dark .edit-form button {
+  background-color: #6a5acd;
+  color: white;
+}
+
+body.dark .admin-form button:hover,
+body.dark .edit-form button:hover {
+  background-color: #836fff;
+}
+
+/* Table in dark mode */
+body.dark table {
+  background-color: #2a2a2a;
+  color: #eee;
+  border-color: #444;
+}
+
+body.dark table thead {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+body.dark table tbody tr:nth-child(even) {
+  background-color: #2f2f2f;
+}
+
+body.dark table td,
+body.dark table th {
+  border-color: #444;
+}
+
+body.dark a.button-delete {
+  background: #e57373;
+}
+
+body.dark a.button-delete:hover {
+  background: #d32f2f;
+}
+
+body.dark .button-edit {
+  background: #4fc3f7;
+}
+
+body.dark .button-edit:hover {
+  background: #29b6f6;
+}
+
+body.dark .navbar,
+body.dark footer {
+  background: #2c2c2c;
+  color: #eee;
+}
+
+/* === Dark Mode: Admin Sidebar Fix === */
+body.dark #admin-sidebar,
+body.dark .admin-sidebar {
+  background-color: #2a2a2a;
+  color: #eee;
+  border-color: #444;
+}
+
+body.dark #admin-sidebar a,
+body.dark .admin-sidebar a {
+  color: #aa8989;
+}
+
+body.dark #admin-sidebar a:hover,
+body.dark .admin-sidebar a:hover {
+  color: #f2b8ff;
+}
+
+body.dark .sidebar {
+  background-color: #2a2a2a;
+  color: #a48c8c;
+}
+.user-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.welcome-msg {
+  font-size: 0.95rem;
+  color: #4a4e69;
+  font-weight: 500;
+}
