@@ -108,7 +108,18 @@ $books = $stmt->get_result();
     <h2 class="section-title">Trending Books</h2>
     <div class="horizontal-scroll">
         <?php
+<<<<<<< HEAD
         $trendingBooks = $conn->query("SELECT books.*, genres.name AS genre_name FROM books LEFT JOIN genres ON books.genre_id = genres.id ORDER BY books.id DESC LIMIT 10");
+=======
+       $trendingBooks = $conn->query("
+  SELECT books.*, genres.name AS genre_name 
+  FROM books 
+  LEFT JOIN genres ON books.genre_id = genres.id 
+  ORDER BY RAND() 
+  LIMIT 10
+");
+
+>>>>>>> 7177a36 (Anime Section)
         while ($book = $trendingBooks->fetch_assoc()):
             $cover = !empty($book['cover_image']) && file_exists("uploads/" . $book['cover_image'])
                 ? "uploads/" . $book['cover_image']
@@ -128,6 +139,42 @@ $books = $stmt->get_result();
 </section>
 <?php endif; ?>
 
+<<<<<<< HEAD
+=======
+
+<?php if (!$isSearching): ?>
+<section class="book-section">
+    <h2 class="section-title">Anime Manga</h2>
+    <div class="horizontal-scroll">
+        <?php
+        $classicGenre = $conn->query("SELECT id FROM genres WHERE name = 'Manga'")->fetch_assoc();
+        $classicGenreId = $classicGenre['id'] ?? 0;
+
+        $classicBooks = $conn->query("SELECT books.*, genres.name AS genre_name 
+                                      FROM books 
+                                      LEFT JOIN genres ON books.genre_id = genres.id 
+                                      WHERE books.genre_id = $classicGenreId 
+                                      LIMIT 10");
+        while ($book = $classicBooks->fetch_assoc()):
+            $cover = !empty($book['cover_image']) && file_exists("uploads/" . $book['cover_image'])
+                ? "uploads/" . $book['cover_image']
+                : "images/placeholder.png";
+        ?>
+        <div class="scroll-book-card">
+            <img src="<?= $cover ?>" alt="<?= htmlspecialchars($book['title']) ?>">
+            <div class="scroll-book-title">
+                <strong><?= htmlspecialchars($book['title']) ?></strong><br>
+                <small>By <?= htmlspecialchars($book['author']) ?></small><br>
+                <small>Genre: <?= htmlspecialchars($book['genre_name'] ?? 'N/A') ?></small>
+            </div>
+            <a href="book.php?id=<?= $book['id'] ?>" class="scroll-btn">Read</a>
+        </div>
+        <?php endwhile; ?>
+    </div>
+</section>
+<?php endif; ?>
+
+>>>>>>> 7177a36 (Anime Section)
 <?php if (!$isSearching): ?>
 <section class="book-section">
     <h2 class="section-title">Classic Books</h2>
@@ -160,6 +207,11 @@ $books = $stmt->get_result();
 </section>
 <?php endif; ?>
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 7177a36 (Anime Section)
 <?php if ($isSearching): ?>
 <section class="book-section">
     <h2 class="section-title">Search Results</h2>
