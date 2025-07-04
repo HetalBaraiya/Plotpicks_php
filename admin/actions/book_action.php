@@ -10,12 +10,6 @@ if ($action === 'add') {
   $description = $_POST['description'];
   $imageName = '';
 
-<<<<<<< HEAD
-  if (!empty($_FILES['cover_image']['name'])) {
-    $imageName = basename($_FILES['cover_image']['name']);
-    move_uploaded_file($_FILES['cover_image']['tmp_name'], "../uploads/$imageName");
-  }
-=======
  $existingImage = $_POST['existing_image'] ?? '';
 $imageName = $existingImage;
 
@@ -31,7 +25,6 @@ if (!empty($_FILES['cover_image']['name'])) {
 $stmt = $pdo->prepare("UPDATE books SET title=?, author=?, genre_id=?, description=?, cover_image=? WHERE id=?");
 $stmt->execute([$title, $author, $genre_id, $description, $imageName, $id]);
 
->>>>>>> 7177a36 (Anime Section)
 
   $stmt = $pdo->prepare("INSERT INTO books (title, author, genre_id, description, cover_image) VALUES (?, ?, ?, ?, ?)");
   $stmt->execute([$title, $author, $genre_id, $description, $imageName]);

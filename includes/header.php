@@ -1,6 +1,5 @@
 <?php
-  // REMOVE this line if already called in the parent page:
-  // session_start(); ❌
+ 
 
   $basePath = (basename(dirname($_SERVER['SCRIPT_NAME'])) === 'admin') ? '../' : '';
 ?>

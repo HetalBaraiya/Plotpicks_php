@@ -108,9 +108,6 @@ $books = $stmt->get_result();
     <h2 class="section-title">Trending Books</h2>
     <div class="horizontal-scroll">
         <?php
-<<<<<<< HEAD
-        $trendingBooks = $conn->query("SELECT books.*, genres.name AS genre_name FROM books LEFT JOIN genres ON books.genre_id = genres.id ORDER BY books.id DESC LIMIT 10");
-=======
        $trendingBooks = $conn->query("
   SELECT books.*, genres.name AS genre_name 
   FROM books 
@@ -119,7 +116,6 @@ $books = $stmt->get_result();
   LIMIT 10
 ");
 
->>>>>>> 7177a36 (Anime Section)
         while ($book = $trendingBooks->fetch_assoc()):
             $cover = !empty($book['cover_image']) && file_exists("uploads/" . $book['cover_image'])
                 ? "uploads/" . $book['cover_image']
@@ -139,8 +135,6 @@ $books = $stmt->get_result();
 </section>
 <?php endif; ?>
 
-<<<<<<< HEAD
-=======
 
 <?php if (!$isSearching): ?>
 <section class="book-section">
@@ -174,7 +168,6 @@ $books = $stmt->get_result();
 </section>
 <?php endif; ?>
 
->>>>>>> 7177a36 (Anime Section)
 <?php if (!$isSearching): ?>
 <section class="book-section">
     <h2 class="section-title">Classic Books</h2>
@@ -207,11 +200,8 @@ $books = $stmt->get_result();
 </section>
 <?php endif; ?>
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 7177a36 (Anime Section)
 <?php if ($isSearching): ?>
 <section class="book-section">
     <h2 class="section-title">Search Results</h2>

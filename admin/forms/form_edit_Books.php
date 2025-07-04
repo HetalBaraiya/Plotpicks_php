@@ -20,10 +20,7 @@ $genres = $pdo->query("SELECT * FROM genres ORDER BY name")->fetchAll();
   </select>
   <textarea name="description"><?= htmlspecialchars($book['description']) ?></textarea>
   <input type="file" name="cover_image">
-<<<<<<< HEAD
-=======
   <input type="hidden" name="existing_image" value="<?= htmlspecialchars($book['cover_image']) ?>">
 
->>>>>>> 7177a36 (Anime Section)
   <button type="submit">Update Book</button>
 </form>
